@@ -1,39 +1,13 @@
 #include <iostream>
 
-#define GLFW_INCLUDE_NONE
-#include <glad/glad.h>
-#include <GLFW/glfw3.h>
 
-void framebuffer_size_callback(GLFWwindow *window, int width, int height);
+
+#include "Interface/Window.h"
+#include "Engine/DaisyEngine.h"
 
 int main() {
-    glfwInit();
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
-    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
-    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    GLFWwindow *window = glfwCreateWindow(800, 600, "wesoła stokrotka kurła", NULL, NULL);
-    if (window == NULL)
-    {
-        std::cout << "Failed to create GLFW window" << std::endl;
-        glfwTerminate();
-        return -1;
-    }
-    glfwMakeContextCurrent(window);
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
-        std::cout << "Failed to initialize GLAD" << std::endl;
-        return -1;
-    }
-    glViewport(0, 0, 800, 600);
-    glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
-
-    while (!glfwWindowShouldClose(window))
-    {
-        glfwPollEvents();
-    }
-}
-
-void framebuffer_size_callback(GLFWwindow *window, int width, int height)
-{
-    glViewport(0, 0, width, height);
+    DaisyEngine engine;
+    engine.MainLoop();
+    
+    return EXIT_SUCCESS;
 }
