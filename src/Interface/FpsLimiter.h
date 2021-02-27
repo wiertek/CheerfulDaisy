@@ -1,7 +1,8 @@
-#include <chrono>
-#include <thread>
 #ifndef FPSLIMITER_H
 #define FPSLIMITER_H
+
+#include <chrono>
+#include <thread>
 
 constexpr int operator ""_fps(unsigned long long framesPerSecond) { return framesPerSecond; }
 
