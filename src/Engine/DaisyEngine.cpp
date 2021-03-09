@@ -24,6 +24,7 @@ void DaisyEngine::MainLoop() {
     
     double lastFrame = 0;
     double deltaTime = 0;
+    glfwSetCursorPosCallback(window._glWindow, DaisyEngine::ProcessMouseInput); 
     while (!glfwWindowShouldClose(window._glWindow))
     {
         double currentFrame = glfwGetTime();
@@ -33,7 +34,7 @@ void DaisyEngine::MainLoop() {
         _openGLRenderer->DrawFrame(window._glWindow);
         
         glfwPollEvents();
-        ProcessKeyboardInput(window._glWindow, deltaTime);
+        processKeyboardInput(window._glWindow, deltaTime);
         fpsLimiter.FrameEnd();
     }
 
@@ -49,7 +50,7 @@ Scene buildSimpleScene() {
     return scene;
 }
 
-void DaisyEngine::ProcessKeyboardInput(GLFWwindow *window, double deltaTime)
+void DaisyEngine::processKeyboardInput(GLFWwindow *window, double deltaTime)
 {
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
         _openGLRenderer->processKeyboardInput(GLFW_KEY_W, deltaTime);
@@ -69,12 +70,35 @@ void DaisyEngine::ProcessKeyboardInput(GLFWwindow *window, double deltaTime)
     if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
         _openGLRenderer->processKeyboardInput(GLFW_KEY_E, deltaTime);
     }
+    if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
+        _openGLRenderer->processKeyboardInput(GLFW_KEY_R, deltaTime);
+    }
+    if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
+        _openGLRenderer->processKeyboardInput(GLFW_KEY_F, deltaTime);
+    }
         
     if(glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
         glfwSetWindowShouldClose(window, true);   
     }
 }
 
-void DaisyEngine::processMouseInput(GLFWwindow* window, double xpos, double ypos) {
+void DaisyEngine::ProcessMouseInput(GLFWwindow* window, double xpos, double ypos) {
+    static auto&& openGLRenderer = OpenGLRenderer::getInstance();
+    static bool firstMouse = true;
+    static double lastX{0}, lastY{0};
+    if (firstMouse)
+    {
+        lastX = xpos;
+        lastY = ypos;
+        firstMouse = false;
+    }
+    auto xOffset = xpos - lastX;
+    auto yOffset = lastY - ypos;
+    lastX = xpos;
+    lastY = ypos;
+
+    if (glfwGetMouseButton(window, GLFW_MOUSE_BUTTON_MIDDLE) == GLFW_PRESS) {
+        openGLRenderer.processMouseInput(GLFW_MOUSE_BUTTON_MIDDLE, xOffset, yOffset);
+    }
 
 }

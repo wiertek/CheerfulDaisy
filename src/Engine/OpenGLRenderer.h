@@ -28,6 +28,8 @@ public:
     void LoadScene(const Scene& scene);
     void DrawFrame(GLFWwindow* window);
     void processKeyboardInput(int key, double deltaTime);
+    void processMouseInput(int key, double xOffset, double yOffset);
+    void setViewportSize(int width, int height);
 
 private:
     OpenGLRenderer() {}
@@ -36,6 +38,8 @@ private:
     std::vector<Object> _objectsToRender;
     Shader _currentShader;
     Camera _camera;
+    int _width;
+    int _height;
 };
 
 #endif

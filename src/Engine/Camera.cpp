@@ -1,43 +1,58 @@
 #include "Camera.h"
 #include "../Common/OpenGL.h"
 
-Camera::Camera(glm::vec3 position, glm::vec3 up, float yaw, float pitch) : 
-    Front(glm::vec3(0.0f, 0.0f, -1.0f)), MovementSpeed(SPEED), RotationSpeed(ROTATION_SPEED), MouseSensitivity(SENSITIVITY), Zoom(ZOOM)
+Camera::Camera(glm::vec3 position)
 {
-    Position = position;
-    WorldUp = up;
-    Yaw = yaw;
-    Pitch = pitch;
+    position = position;
     updateCameraVectors();
 }
 
 glm::mat4 Camera::getViewMatrix()
 {
-    return glm::lookAt(Position, Position + Front, Up);
+    return glm::lookAt(_position, _position + _front, _up);
 }
 
 void Camera::updateCameraVectors()
 {
     glm::vec3 front;
-    front.x = cos(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-    front.y = sin(glm::radians(Pitch));
-    front.z = sin(glm::radians(Yaw)) * cos(glm::radians(Pitch));
-    Front = glm::normalize(front);
-    Right = glm::normalize(glm::cross(Front, WorldUp));
-    Up    = glm::normalize(glm::cross(Right, Front));
+    front.x = cos(glm::radians(_yaw)) * cos(glm::radians(_pitch));
+    front.y = sin(glm::radians(_pitch));
+    front.z = sin(glm::radians(_yaw)) * cos(glm::radians(_pitch));
+    _front = glm::normalize(front);
+    _right = glm::normalize(glm::cross(_front, _worldUp));
+    _up    = glm::normalize(glm::cross(_right, _front));
 }
 
-void Camera::processKeyboard(int key, float deltaTime)
+void Camera::processKeyboard(int key, double deltaTime)
 {
-    float velocity = MovementSpeed * deltaTime;
-    float rotationVelocity = RotationSpeed * deltaTime;
+    float velocity = _movementSpeed * deltaTime;
+    float rotationVelocity = _rotationSpeed * deltaTime;
     switch(key) {
-        case GLFW_KEY_W: Position += Front * velocity; break;
-        case GLFW_KEY_S: Position -= Front * velocity; break;
-        case GLFW_KEY_A: Position -= Right * velocity; break;
-        case GLFW_KEY_D: Position += Right * velocity; break;
-        case GLFW_KEY_Q: Yaw -= RotationSpeed; break;
-        case GLFW_KEY_E: Yaw += RotationSpeed; break;
+        case GLFW_KEY_W: _position += _front * velocity; break;
+        case GLFW_KEY_S: _position -= _front * velocity; break;
+        case GLFW_KEY_A: _position -= _right * velocity; break;
+        case GLFW_KEY_D: _position += _right * velocity; break;
+        case GLFW_KEY_R: _position += _worldUp * velocity; break;
+        case GLFW_KEY_F: _position -= _worldUp * velocity; break;
+        case GLFW_KEY_Q: _yaw -= _rotationSpeed; break;
+        case GLFW_KEY_E: _yaw += _rotationSpeed; break;
     }
     updateCameraVectors();
+}
+
+void Camera::processMouse(int key, double xOffset, double yOffset) {
+    if(key == GLFW_MOUSE_BUTTON_MIDDLE) {
+        float sensitivity = 0.25f;
+        xOffset *= sensitivity;
+        yOffset *= sensitivity;
+
+        _yaw   += xOffset;
+        _pitch += yOffset;
+
+        if(_pitch > 89.0f)
+            _pitch = 89.0f;
+        if(_pitch < -89.0f)
+            _pitch = -89.0f;
+         updateCameraVectors();
+    }
 }

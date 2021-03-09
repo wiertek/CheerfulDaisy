@@ -36,19 +36,17 @@ void OpenGLRenderer::LoadScene(const Scene& scene) {
     glEnable(GL_DEPTH_TEST); 
     _currentShader.Use();
 
-    _camera.Position = scene.cameraInitialPosition;
-
-    glm::mat4 projection;
-    float fov = 45.0f;
-    projection = glm::perspective(glm::radians(fov), 800.0f / 600.0f, 0.1f, 100.0f);
-    _currentShader.SetMat4f("projection", projection);
-
+    _camera.setPosition(scene.cameraInitialPosition);
 }
 
 void OpenGLRenderer::DrawFrame(GLFWwindow* window) {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
+    glm::mat4 projection;
+    float fov = 45.0f;
+    projection = glm::perspective(glm::radians(fov), static_cast<float>(_width)/_height, 0.1f, 100.0f);
+    _currentShader.SetMat4f("projection", projection);
+    
     for(auto&& object : _objectsToRender) {
         glBindVertexArray(object.VAO); // use VAO which tells what to draw
         _currentShader.SetMat4f("model", object.model);
@@ -67,9 +65,22 @@ void OpenGLRenderer::processKeyboardInput(int key, double deltaTime) {
         case GLFW_KEY_D:
         case GLFW_KEY_Q:
         case GLFW_KEY_E:
+        case GLFW_KEY_R:
+        case GLFW_KEY_F:
             _camera.processKeyboard(key, deltaTime);
             break;
     }
+}
+
+void OpenGLRenderer::processMouseInput(int key, double xOffset, double yOffset) {
+    if(key == GLFW_MOUSE_BUTTON_MIDDLE) {
+        _camera.processMouse(key, xOffset, yOffset);
+    }
+}
+
+void OpenGLRenderer::setViewportSize(int width, int height) {
+    _width = width;
+    _height = height;
 }
 
 std::vector<float> OpenGLRenderer::UnpackVertices(const std::vector<Triangle>& triangles) {

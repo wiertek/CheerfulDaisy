@@ -3,14 +3,16 @@
 #include <functional>
 
 #include "Window.h"
+#include "..\Engine\OpenGLRenderer.h"
 
 Window::Window() {
     glfwInit();
     glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 4);
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-    glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    _glWindow = glfwCreateWindow(800, 600, "Cheerful Daisy", NULL, NULL);
+    glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
+    _glWindow = glfwCreateWindow(viewportWidth, viewportHeight, "Cheerful Daisy", NULL, NULL);
+    OpenGLRenderer::getInstance().setViewportSize(viewportWidth, viewportHeight);
     if (_glWindow == NULL)
     {
         std::cout << "Failed to create GLFW window" << std::endl;
@@ -26,13 +28,11 @@ Window::Window() {
     glViewport(0, 0, 800, 600);
     using namespace std::placeholders;
     glfwSetWindowUserPointer(_glWindow, this);
-    glfwSetKeyCallback(_glWindow, KeyPressed);
+    glfwSetFramebufferSizeCallback(_glWindow, Window::SizeChangedCallback);
 }
 
-void KeyPressed(GLFWwindow* glfwWindow, int key, int scancode, int action, int mods) {
-    auto& window = *static_cast<Window*>(glfwGetWindowUserPointer(glfwWindow));
-
-     if (key == GLFW_KEY_ESCAPE) {
-         glfwSetWindowShouldClose(glfwWindow, true);  
-     }
+void Window::SizeChangedCallback(GLFWwindow* window, int width, int height) {
+    glViewport(0, 0, width, height);
+    OpenGLRenderer::getInstance().setViewportSize(width, height);
 }
+

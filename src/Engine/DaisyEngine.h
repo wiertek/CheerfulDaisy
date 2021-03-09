@@ -11,8 +11,8 @@ public:
     void MainLoop();
 
 private:
-    void ProcessKeyboardInput(GLFWwindow *window, double deltaTime);
-    void processMouseInput(GLFWwindow* window, double xpos, double ypos);
+    void processKeyboardInput(GLFWwindow *window, double deltaTime);
+    static void ProcessMouseInput(GLFWwindow* window, double xpos, double ypos);
 
     OpenGLRenderer* _openGLRenderer{ nullptr };
 };

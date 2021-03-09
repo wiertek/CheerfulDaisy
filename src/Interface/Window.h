@@ -3,6 +3,8 @@
 
 #include "../Common/OpenGL.h"
 
+constexpr auto viewportHeight = 600;
+constexpr auto viewportWidth = 800;
 
 class Window {
 
@@ -10,9 +12,9 @@ public:
     Window();
 
     GLFWwindow* _glWindow;
+    static void SizeChangedCallback(GLFWwindow* window, int width, int height);
 };
 
-void KeyPressed(GLFWwindow* glfwWindow, int key, int scancode, int action, int mods);
 
 
 #endif

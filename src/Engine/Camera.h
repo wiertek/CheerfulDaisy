@@ -4,35 +4,35 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 
-const float YAW         = -90.0f;
-const float PITCH       =  0.0f;
-const float SPEED       =  2.5f;
-constexpr auto ROTATION_SPEED = 1.5;
-const float SENSITIVITY =  0.1f;
-const float ZOOM        =  45.0f;
-
 class Camera {
+private:
+    glm::vec3 _position;
+    glm::vec3 _front{ glm::vec3(0.0f, 0.0f, -1.0f) };
+    glm::vec3 _right;
+    glm::vec3 _up;
+    glm::vec3 _worldUp { glm::vec3(0.0f, 1.0f, 0.0f) };
+ 
+    float _yaw{ -90.0f };
+    float _pitch{ 0.0f };
+
+    float _movementSpeed{ 2.5f };
+    double _rotationSpeed{ 1.5 };
+    float _mouseSensitivity{ 0.1f };
+    float _zoom { 45.0f };
 
 public:
-    glm::vec3 Position;
-    glm::vec3 Front;
-    glm::vec3 Up;
-    glm::vec3 Right;
-    glm::vec3 WorldUp;
 
-    float Yaw;
-    float Pitch;
 
-    float MovementSpeed;
-    double RotationSpeed{ROTATION_SPEED};
-    float MouseSensitivity;
-    float Zoom;
-
-    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f), glm::vec3 up = glm::vec3(0.0f, 1.0f, 0.0f), float yaw = YAW, float pitch = PITCH);
+    Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f));
 
     glm::mat4 getViewMatrix();
     void updateCameraVectors();
-    void processKeyboard(int key, float deltaTime);
+    void processKeyboard(int key, double deltaTime);
+    void processMouse(int key, double xOffset, double yOffset);
+
+    void setPosition(glm::vec3 position) {
+        _position = position;
+    }
 };
 
 #endif
