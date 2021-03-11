@@ -25,7 +25,7 @@ Window::Window() {
         std::cout << "Failed to initialize GLAD" << std::endl;
         std::exit(EXIT_FAILURE);
     }
-    glViewport(0, 0, 800, 600);
+    glViewport(0, 0, viewportWidth, viewportHeight);
     using namespace std::placeholders;
     glfwSetWindowUserPointer(_glWindow, this);
     glfwSetFramebufferSizeCallback(_glWindow, Window::SizeChangedCallback);

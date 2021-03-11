@@ -3,8 +3,8 @@
 
 #include "../Common/OpenGL.h"
 
-constexpr auto viewportHeight = 600;
-constexpr auto viewportWidth = 800;
+constexpr auto viewportHeight = 900;
+constexpr auto viewportWidth = 1600;
 
 class Window {
 

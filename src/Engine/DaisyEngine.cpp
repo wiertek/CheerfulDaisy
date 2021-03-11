@@ -21,18 +21,25 @@ void DaisyEngine::MainLoop() {
     _openGLRenderer = &OpenGLRenderer::getInstance();
     auto simpleScene = buildSimpleScene();
     _openGLRenderer->LoadScene(simpleScene);
-    
+    _overlay = std::make_unique<Overlay>(window._glWindow);
+    glfwSetCursorPosCallback(window._glWindow, DaisyEngine::ProcessMouseInput); 
+
     double lastFrame = 0;
     double deltaTime = 0;
-    glfwSetCursorPosCallback(window._glWindow, DaisyEngine::ProcessMouseInput); 
-    while (!glfwWindowShouldClose(window._glWindow))
-    {
+    auto measureDeltaTime = [&lastFrame, &deltaTime]() {
         double currentFrame = glfwGetTime();
         deltaTime = currentFrame - lastFrame;
         lastFrame = currentFrame;
+    };
 
-        _openGLRenderer->DrawFrame(window._glWindow);
-        
+    while (!glfwWindowShouldClose(window._glWindow))
+    {
+        measureDeltaTime();
+
+        _openGLRenderer->DrawFrame(window._glWindow, _overlay->getSettings());
+        _overlay->draw();
+
+        glfwSwapBuffers(window._glWindow);
         glfwPollEvents();
         processKeyboardInput(window._glWindow, deltaTime);
         fpsLimiter.FrameEnd();

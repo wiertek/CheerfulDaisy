@@ -4,12 +4,16 @@ project(Renderer)
 set(CMAKE_TOOLCHAIN_FILE C:\\Prog\\repos\\CheerfulDaisy\\lib\\vcpkg.windows\\scripts\\buildsystems\\vcpkg.cmake)
 
 set(SOURCES CheerfulDaisy.cpp Interface/Window.cpp Engine/DaisyEngine.cpp Engine/OpenGLRenderer.cpp Scene/Scene.cpp Scene/Box.cpp
-  Engine/Shader.cpp Engine/Camera.cpp)
+  Engine/Shader.cpp Engine/Camera.cpp Interface/Overlay.cpp
+  Interface/DearImGui/imgui_demo.cpp Interface/DearImGui/imgui_draw.cpp Interface/DearImGui/imgui_impl_glfw.cpp Interface/DearImGui/imgui_impl_opengl3.cpp
+  Interface/DearImGui/imgui_tables.cpp Interface/DearImGui/imgui_widgets.cpp Interface/DearImGui/imgui.cpp)
+
 
 add_executable(Renderer  ${SOURCES}) 
 target_link_libraries(Renderer 
     PRIVATE
         glad glfw glm)
+target_compile_features(Renderer PUBLIC cxx_std_20)
 
 add_custom_command(
   TARGET ${PROJECT_NAME} POST_BUILD

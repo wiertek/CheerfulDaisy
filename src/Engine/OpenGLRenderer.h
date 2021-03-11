@@ -3,6 +3,7 @@
 
 #include "../Scene/Scene.h"
 #include "../Common/OpenGL.h"
+#include "OpenGLRendererSettings.h"
 #include <array>
 #include <glm/glm.hpp>
 #include "Shader.h"
@@ -26,7 +27,7 @@ public:
     void operator=(const OpenGLRenderer&) = delete;
     
     void LoadScene(const Scene& scene);
-    void DrawFrame(GLFWwindow* window);
+    void DrawFrame(GLFWwindow* window, const OpenGLRendererSettings& settings);
     void processKeyboardInput(int key, double deltaTime);
     void processMouseInput(int key, double xOffset, double yOffset);
     void setViewportSize(int width, int height);

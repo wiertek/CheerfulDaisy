@@ -16,8 +16,6 @@ void OpenGLRenderer::LoadScene(const Scene& scene) {
         glGenVertexArrays(1, &renderObject.VAO);
         glBindVertexArray(renderObject.VAO); 
         glBindBuffer(GL_ARRAY_BUFFER, renderObject.VBO);
-        auto aa = vertices.size();
-        auto aaa = sizeof(float);
         auto size = vertices.size() * sizeof(float);
         glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW); 
         glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 3 * sizeof(float), (void*)0);
@@ -39,12 +37,20 @@ void OpenGLRenderer::LoadScene(const Scene& scene) {
     _camera.setPosition(scene.cameraInitialPosition);
 }
 
-void OpenGLRenderer::DrawFrame(GLFWwindow* window) {
+void OpenGLRenderer::DrawFrame(GLFWwindow* window, const OpenGLRendererSettings& settings) {
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glm::mat4 projection;
-    float fov = 45.0f;
-    projection = glm::perspective(glm::radians(fov), static_cast<float>(_width)/_height, 0.1f, 100.0f);
+    if(settings.projection == Projection::PERSPECTIVE) {
+        projection = glm::perspective(settings.fieldOfView, static_cast<float>(_width)/_height, settings.frustumMin, settings.frustumMax);
+    } else {
+        auto aspectRatio = _width / _height;
+        projection = glm::ortho(-settings.orthoFieldOfViewFactor * aspectRatio,
+            settings.orthoFieldOfViewFactor * aspectRatio,
+            -settings.orthoFieldOfViewFactor,
+            settings.orthoFieldOfViewFactor, settings.frustumMin, settings.frustumMax);
+    }
+
     _currentShader.SetMat4f("projection", projection);
     
     for(auto&& object : _objectsToRender) {
@@ -53,8 +59,6 @@ void OpenGLRenderer::DrawFrame(GLFWwindow* window) {
         _currentShader.SetMat4f("view", _camera.getViewMatrix());
         glDrawArrays(GL_TRIANGLES, 0, object.verticesNum); 
     }
-
-    glfwSwapBuffers(window);
 }
 
 void OpenGLRenderer::processKeyboardInput(int key, double deltaTime) {
