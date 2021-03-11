@@ -2,4 +2,4 @@
 
 Maybe some day it will become useful
 
-![](/res/capture1.png)
+![](/res/capture1.PNG)
