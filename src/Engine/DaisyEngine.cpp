@@ -51,8 +51,10 @@ void DaisyEngine::MainLoop() {
 //TODO mock
 Scene buildSimpleScene() {
     Scene scene;
-    scene.Add(std::make_unique<Box>(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.5f, 0.5f, 0.5f)));
+    scene.Add(std::make_unique<Box>(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.5f, 0.5f, 0.5f)))
+        ->SetColor(glm::vec3(1.0f, 0.0f, 0.75f));
     scene.Add(std::make_unique<Box>(glm::vec3(-2.0f, 0.0f, -2.0f), glm::vec3(-3.0f, 2.0f, -6.0f)));
+    scene.lightSource.position = glm::vec3(5.0f, 0.0f, -5.0f);
     scene.cameraInitialPosition = glm::vec3(0.0f, 0.0f, 3.0f);
     return scene;
 }

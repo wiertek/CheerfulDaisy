@@ -5,6 +5,6 @@ std::unique_ptr<Primitive>& Scene::Add(std::unique_ptr<Primitive> primitive) {
     return _primitives.back();
 }
 
- const std::vector<std::unique_ptr<Primitive>>& Scene::GetPrimitives() const {
+const std::vector<std::unique_ptr<Primitive>>& Scene::GetPrimitives() const {
     return _primitives;
 }

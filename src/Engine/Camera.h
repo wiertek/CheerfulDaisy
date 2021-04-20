@@ -25,7 +25,7 @@ public:
 
     Camera(glm::vec3 position = glm::vec3(0.0f, 0.0f, 0.0f));
 
-    glm::mat4 getViewMatrix();
+    glm::mat4 getViewMatrix() const;
     void updateCameraVectors();
     void processKeyboard(int key, double deltaTime);
     void processMouse(int key, double xOffset, double yOffset);

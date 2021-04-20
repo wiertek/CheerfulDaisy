@@ -6,15 +6,10 @@
 #include "OpenGLRendererSettings.h"
 #include <array>
 #include <glm/glm.hpp>
-#include "Shader.h"
+#include "Shaders/Shader.h"
+#include "Shaders/SimpleShader.h"
+#include "Shaders/PhongShader.h"
 #include "Camera.h"
-
-struct Object {
-    unsigned int VBO; 
-    unsigned int VAO; 
-    size_t verticesNum;
-    glm::mat4 model{ glm::mat4(1.0f) };
-};
 
 class OpenGLRenderer {
 public:
@@ -34,13 +29,24 @@ public:
 
 private:
     OpenGLRenderer() {}
-    std::vector<float> UnpackVertices(const std::vector<Triangle>& triangles);
+    std::vector<float> UnpackVerticesAndNormals(const std::vector<Triangle>& triangles);
+    void GenerateLightObject(const LightSource& ligthSource);
+
+    FrameDrawingInfo _drawingInfo;
 
     std::vector<Object> _objectsToRender;
-    Shader _currentShader;
+    Object lightObject;
     Camera _camera;
     int _width;
     int _height;
+    LightSource _lightSource;
+
+    //shaders
+    Shader* _currentShader;
+    SimpleShader _simpleShader;
+    SimpleShader _lightShader;
+    PhongShader _phongShader;
+
 };
 
 #endif
