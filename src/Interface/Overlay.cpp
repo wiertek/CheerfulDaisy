@@ -1,7 +1,7 @@
 #include "Overlay.h"
-#include "DearImGui\imgui.h"
-#include "DearImGui\imgui_impl_glfw.h"
-#include "DearImGui\imgui_impl_opengl3.h"
+#include "DearImGui/imgui.h"
+#include "DearImGui/imgui_impl_glfw.h"
+#include "DearImGui/imgui_impl_opengl3.h"
 
 Overlay::Overlay(GLFWwindow* window) {
     ImGui::CreateContext();

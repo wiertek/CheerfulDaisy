@@ -3,7 +3,7 @@
 #include <functional>
 
 #include "Window.h"
-#include "..\Engine\OpenGLRenderer.h"
+#include "../Engine/OpenGLRenderer.h"
 
 Window::Window() {
     glfwInit();
