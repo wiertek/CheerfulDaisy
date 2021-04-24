@@ -5,11 +5,7 @@
 #include <memory>
 #include <glm/glm.hpp>
 #include "Primitive.h"
-
-struct LightSource {
-    glm::vec3 position;
-    glm::vec3 color{ glm::vec3(1.0f, 1.0f, 1.0f) };
-};
+#include "../Common/Definitions.h"
 
 class Scene {
 public:
@@ -18,7 +14,17 @@ public:
     std::unique_ptr<Primitive>& Add(std::unique_ptr<Primitive> primitive);
     const std::vector<std::unique_ptr<Primitive>>& GetPrimitives() const;
 
-    LightSource lightSource;
+    LightSource lightSource = {
+        .ambient = glm::vec3(0.2f, 0.2f, 0.2f),
+        .diffuse = glm::vec3(0.5f, 0.5f, 0.5f),
+        .specular = glm::vec3(1.0f, 1.0f, 1.0f),
+    };
+    Material material = {
+        .ambient = glm::vec3(1.0f, 1.0f, 1.0f),
+        .diffuse = glm::vec3(1.0f, 1.0f, 1.0f),
+        .specular = glm::vec3(1.0f, 1.0f, 1.0f),
+        .shininess = 32.0f
+    };
 
 private:
     std::vector<std::unique_ptr<Primitive>> _primitives;

@@ -22,6 +22,7 @@ void DaisyEngine::MainLoop() {
     auto simpleScene = buildSimpleScene();
     _openGLRenderer->LoadScene(simpleScene);
     _overlay = std::make_unique<Overlay>(window._glWindow);
+    _overlay->LoadSceneSettings(simpleScene);
     glfwSetCursorPosCallback(window._glWindow, DaisyEngine::ProcessMouseInput); 
 
     double lastFrame = 0;
@@ -36,8 +37,8 @@ void DaisyEngine::MainLoop() {
     {
         measureDeltaTime();
 
-        _openGLRenderer->DrawFrame(window._glWindow, _overlay->getSettings());
-        _overlay->draw();
+        _openGLRenderer->DrawFrame(window._glWindow, _overlay->GetSettings());
+        _overlay->Draw();
 
         glfwSwapBuffers(window._glWindow);
         glfwPollEvents();
@@ -48,14 +49,14 @@ void DaisyEngine::MainLoop() {
     glfwTerminate();
 }
 
-//TODO mock
 Scene buildSimpleScene() {
     Scene scene;
-    scene.Add(std::make_unique<Box>(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.5f, 0.5f, 0.5f)))
-        ->SetColor(glm::vec3(1.0f, 0.0f, 0.75f));
+    scene.Add(std::make_unique<Box>(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.5f, 0.5f, 0.5f)));
     scene.Add(std::make_unique<Box>(glm::vec3(-2.0f, 0.0f, -2.0f), glm::vec3(-3.0f, 2.0f, -6.0f)));
-    scene.lightSource.position = glm::vec3(5.0f, 0.0f, -5.0f);
+    scene.lightSource.position = glm::vec3(2.0f, 1.0f, -2.0f);
     scene.cameraInitialPosition = glm::vec3(0.0f, 0.0f, 3.0f);
+    scene.material.ambient = glm::vec3(1.0f, 0.4f, 0.0f);
+    scene.material.shininess = 32.0f;
     return scene;
 }
 

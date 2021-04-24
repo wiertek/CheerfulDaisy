@@ -9,6 +9,7 @@
 #include "Shaders/Shader.h"
 #include "Shaders/SimpleShader.h"
 #include "Shaders/PhongShader.h"
+#include "Shaders/GouraudShader.h"
 #include "Camera.h"
 
 class OpenGLRenderer {
@@ -46,6 +47,7 @@ private:
     SimpleShader _simpleShader;
     SimpleShader _lightShader;
     PhongShader _phongShader;
+    GouraudShader _gouraudShader;
 
 };
 

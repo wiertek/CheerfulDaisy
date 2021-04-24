@@ -6,7 +6,7 @@
 
 class Camera {
 private:
-    glm::vec3 _position;
+   
     glm::vec3 _front{ glm::vec3(0.0f, 0.0f, -1.0f) };
     glm::vec3 _right;
     glm::vec3 _up;
@@ -30,9 +30,7 @@ public:
     void processKeyboard(int key, double deltaTime);
     void processMouse(int key, double xOffset, double yOffset);
 
-    void setPosition(glm::vec3 position) {
-        _position = position;
-    }
+    glm::vec3 position;
 };
 
 #endif

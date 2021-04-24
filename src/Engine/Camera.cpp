@@ -9,7 +9,7 @@ Camera::Camera(glm::vec3 position)
 
 glm::mat4 Camera::getViewMatrix() const
 {
-    return glm::lookAt(_position, _position + _front, _up);
+    return glm::lookAt(position, position + _front, _up);
 }
 
 void Camera::updateCameraVectors()
@@ -28,12 +28,12 @@ void Camera::processKeyboard(int key, double deltaTime)
     float velocity = _movementSpeed * deltaTime;
     float rotationVelocity = _rotationSpeed * deltaTime;
     switch(key) {
-        case GLFW_KEY_W: _position += _front * velocity; break;
-        case GLFW_KEY_S: _position -= _front * velocity; break;
-        case GLFW_KEY_A: _position -= _right * velocity; break;
-        case GLFW_KEY_D: _position += _right * velocity; break;
-        case GLFW_KEY_R: _position += _worldUp * velocity; break;
-        case GLFW_KEY_F: _position -= _worldUp * velocity; break;
+        case GLFW_KEY_W: position += _front * velocity; break;
+        case GLFW_KEY_S: position -= _front * velocity; break;
+        case GLFW_KEY_A: position -= _right * velocity; break;
+        case GLFW_KEY_D: position += _right * velocity; break;
+        case GLFW_KEY_R: position += _worldUp * velocity; break;
+        case GLFW_KEY_F: position -= _worldUp * velocity; break;
         case GLFW_KEY_Q: _yaw -= _rotationSpeed; break;
         case GLFW_KEY_E: _yaw += _rotationSpeed; break;
     }

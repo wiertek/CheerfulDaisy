@@ -1,24 +1,21 @@
-#ifndef PHONGSHADER_H
-#define PHONGSHADER_H
+#ifndef GOURAUDSHADER_H
+#define GOURAUDSHADER_H
 
 #include "Shader.h"
 
-class PhongShader : public Shader {
+class GouraudShader : public Shader {
 
 public:
-  PhongShader() {}
-  PhongShader(const char *vertexPath, const char *fragmentPath)
-      : Shader(vertexPath, fragmentPath) {}
+  GouraudShader() {}
+  GouraudShader(const char *vertexPath, const char *fragmentPath) : Shader(vertexPath, fragmentPath) {}
 
-  void SetParamsForObject(const FrameDrawingInfo &frameDrawingInfo,
-                          const Object &object, const Camera &camera,
-                          const LightSource &ligthSource,
-                          const OpenGLRendererSettings &settings) override {
+  void SetParamsForObject(const FrameDrawingInfo &frameDrawingInfo, const Object &object, const Camera &camera,
+                          const LightSource &ligthSource, const OpenGLRendererSettings &settings) override {
     SetMat4f("projection", frameDrawingInfo.projection);
     SetMat4f("model", object.model);
     SetMat4f("view", camera.getViewMatrix());
     SetVec3("light.position", ligthSource.position);
-    SetVec3("light.ambient",settings.lightSource.ambient);
+    SetVec3("light.ambient", settings.lightSource.ambient);
     SetVec3("light.diffuse", settings.lightSource.diffuse);
     SetVec3("light.specular", settings.lightSource.specular);
     SetVec3("viewPos", camera.position);

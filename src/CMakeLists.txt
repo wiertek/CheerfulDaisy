@@ -9,10 +9,10 @@ set(SOURCES CheerfulDaisy.cpp Interface/Window.cpp Engine/DaisyEngine.cpp Engine
   Interface/DearImGui/imgui_tables.cpp Interface/DearImGui/imgui_widgets.cpp Interface/DearImGui/imgui.cpp)
   
 set(HEADERS Common/Definitions.h Common/OpenGL.h Engine/Camera.h Engine/DaisyEngine.h Engine/OpenGLRenderer.h Engine/OpenGLRendererSettings.h
-  Engine/Shaders/Shader.h Engine/Shaders/SimpleShader.h Engine/Shaders/PhongShader.h Interface/FpsLimiter.h Interface/Overlay.h Interface/Window.h Scene/Box.h Scene/Primitive.h Scene/Scene.h)
+  Engine/Shaders/Shader.h Engine/Shaders/SimpleShader.h Engine/Shaders/PhongShader.h Engine/Shaders/GouraudShader.h Interface/FpsLimiter.h Interface/Overlay.h Interface/Window.h Scene/Box.h Scene/Primitive.h Scene/Scene.h)
 
 set(SHADERS Shaders/SimpleVertexShader.glsl Shaders/SimpleFragmentShader.glsl Shaders/LightVertexShader.glsl Shaders/LightFragmentShader.glsl
-  Shaders/PhongVertexShader.glsl Shaders/PhongFragmentShader.glsl)
+  Shaders/PhongVertexShader.glsl Shaders/PhongFragmentShader.glsl Shaders/GouraudVertexShader.glsl Shaders/GouraudFragmentShader.glsl)
 
 add_executable(Renderer ${HEADERS} ${SOURCES} ${SHADERS}) 
 target_link_libraries(Renderer 
@@ -57,3 +57,16 @@ add_custom_command(
   COMMAND ${CMAKE_COMMAND} -E copy 
     ${CMAKE_CURRENT_SOURCE_DIR}/Shaders/PhongFragmentShader.glsl 
     $<TARGET_FILE_DIR:${PROJECT_NAME}>/Shaders/PhongFragmentShader.glsl)
+
+add_custom_command(
+  TARGET ${PROJECT_NAME} POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy 
+    ${CMAKE_CURRENT_SOURCE_DIR}/Shaders/GouraudVertexShader.glsl 
+    $<TARGET_FILE_DIR:${PROJECT_NAME}>/Shaders/GouraudVertexShader.glsl)
+    
+
+add_custom_command(
+  TARGET ${PROJECT_NAME} POST_BUILD
+  COMMAND ${CMAKE_COMMAND} -E copy 
+    ${CMAKE_CURRENT_SOURCE_DIR}/Shaders/GouraudFragmentShader.glsl 
+    $<TARGET_FILE_DIR:${PROJECT_NAME}>/Shaders/GouraudFragmentShader.glsl)
