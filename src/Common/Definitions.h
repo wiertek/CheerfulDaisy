@@ -20,6 +20,7 @@ struct Triangle {
 struct Object {
     unsigned int VBO;
     unsigned int VAO;
+    unsigned int EBO;
     size_t verticesNum;
     glm::mat4 model{glm::mat4(1.0f)};
 };

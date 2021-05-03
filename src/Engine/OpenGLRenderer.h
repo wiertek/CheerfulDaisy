@@ -32,6 +32,7 @@ private:
     OpenGLRenderer() {}
     std::vector<float> UnpackVerticesAndNormals(const std::vector<Triangle>& triangles);
     void GenerateLightObject(const LightSource& ligthSource);
+    void UpdateLightSourceModelMatrix();
 
     FrameDrawingInfo _drawingInfo;
 

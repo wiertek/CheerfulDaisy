@@ -1,8 +1,9 @@
 #include "OpenGLRenderer.h"
 #include "../Common/Definitions.h"
 #include "../Common/OpenGL.h"
-#include "../Scene/Box.h"
+#include "../Scene/Plain.h"
 #include "Shaders/Shader.h"
+#include <cmath>
 #include <glm/gtc/matrix_transform.hpp>
 
 void OpenGLRenderer::LoadScene(const Scene &scene) {
@@ -72,11 +73,13 @@ void OpenGLRenderer::DrawFrame(GLFWwindow *window, const OpenGLRendererSettings 
     }
 
     _lightShader.Use();
+    _lightShader.SetVec3("color", settings.lightSource.specular);
     _lightShader.SetMat4f("projection", _drawingInfo.projection);
+    UpdateLightSourceModelMatrix();
     _lightShader.SetMat4f("model", lightObject.model);
     _lightShader.SetMat4f("view", _camera.getViewMatrix());
     glBindVertexArray(this->lightObject.VAO);
-    glDrawArrays(GL_TRIANGLES, 0, lightObject.verticesNum);
+    glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
 }
 
 void OpenGLRenderer::processKeyboardInput(int key, double deltaTime) {
@@ -122,22 +125,53 @@ std::vector<float> OpenGLRenderer::UnpackVerticesAndNormals(const std::vector<Tr
 void OpenGLRenderer::GenerateLightObject(const LightSource &lightSource) {
     constexpr auto lightBoxRadius = 0.3f;
     auto &&lightPosition = lightSource.position;
-    auto lightBox = Box(lightPosition - glm::vec3(lightBoxRadius), lightPosition + glm::vec3(lightBoxRadius));
-
+    auto lightPlain = Plain(-glm::vec3(lightBoxRadius), glm::vec3(lightBoxRadius));
     auto lightObject = Object{};
+    glGenBuffers(1, &lightObject.EBO);
     glGenBuffers(1, &lightObject.VBO);
     glGenVertexArrays(1, &lightObject.VAO);
     glBindVertexArray(lightObject.VAO);
-    glBindBuffer(GL_ARRAY_BUFFER, lightObject.VBO);
-    auto vertices = UnpackVerticesAndNormals(lightBox.GetTriangles());
-    auto size = vertices.size() * sizeof(float);
-    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
-    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)0);
-    glEnableVertexAttribArray(0);
-    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 6 * sizeof(float), (void *)(3 * sizeof(float)));
-    glEnableVertexAttribArray(1);
-    lightObject.verticesNum = vertices.size() / 3;
-    this->lightObject = std::move(lightObject);
+  
 
+    auto vertices = lightPlain.GetVerticesWithCoords();
+
+    auto indices = lightPlain.GetIndices();
+
+    glBindBuffer(GL_ARRAY_BUFFER, lightObject.VBO);
+    glBufferData(GL_ARRAY_BUFFER, vertices.size() * sizeof(float), vertices.data(), GL_STATIC_DRAW);
+
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, lightObject.EBO);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, vertices.size() * sizeof(float), indices.data(), GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)0);
+    glEnableVertexAttribArray(0);
+    glVertexAttribPointer(1, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float), (void *)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    this->lightObject = std::move(lightObject);
     _lightShader = SimpleShader("Shaders/LightVertexShader.glsl", "Shaders/LightFragmentShader.glsl");
+}
+
+void OpenGLRenderer::UpdateLightSourceModelMatrix() {
+    glm::vec3 direction = glm::normalize(_camera.position - _lightSource.position);
+    glm::mat4 model = glm::mat4(1.0f);
+    model = glm::translate(model, _lightSource.position);
+
+    auto directionInXPlane = glm::normalize(glm::vec3(direction.x, 0.0f, direction.z));
+    float angle = std::acosf(directionInXPlane.x);
+    if(directionInXPlane.z > 0) {
+        angle *= -1;   
+    }
+
+    glm::vec3 right = glm::normalize(glm::cross(directionInXPlane, glm::vec3(0.0f, 1.0f, 0.0f)));
+    float angleY = std::acosf(direction.x*directionInXPlane.x + direction.z*directionInXPlane.z);
+    if(direction.y > 0) {
+        angleY *= -1;
+    }
+    
+    model = glm::rotate(model, 1.57f - angleY, right);
+    model = glm::rotate(model, angle, glm::vec3(0.0f, 1.0f, 0.0f));
+
+
+    lightObject.model = model;
 }

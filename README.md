@@ -1,5 +1,5 @@
 # Cheerful Daisy
 
-Maybe some day it will become useful
+just learning basics of OpenGL for fun
 
-![](/res/capture1.PNG)
+![](/res/capture2.PNG)
