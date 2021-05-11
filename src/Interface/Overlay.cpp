@@ -17,31 +17,31 @@ Overlay::Overlay(GLFWwindow *window)
 }
 
 void Overlay::LoadSceneSettings(const Scene &scene) {
-    _materialAmbient[0] = scene.material.ambient.r;
-    _materialAmbient[1] = scene.material.ambient.g;
-    _materialAmbient[2] = scene.material.ambient.b;
+    _materialAmbient[0] = scene.initialSettings.material.ambient.r;
+    _materialAmbient[1] = scene.initialSettings.material.ambient.g;
+    _materialAmbient[2] = scene.initialSettings.material.ambient.b;
 
-    _materialDiffuse[0] = scene.material.diffuse.r;
-    _materialDiffuse[1] = scene.material.diffuse.g;
-    _materialDiffuse[2] = scene.material.diffuse.b;
+    _materialDiffuse[0] = scene.initialSettings.material.diffuse.r;
+    _materialDiffuse[1] = scene.initialSettings.material.diffuse.g;
+    _materialDiffuse[2] = scene.initialSettings.material.diffuse.b;
 
-    _materialSpecular[0] = scene.material.specular.r;
-    _materialSpecular[1] = scene.material.specular.g;
-    _materialSpecular[2] = scene.material.specular.b;
+    _materialSpecular[0] = scene.initialSettings.material.specular.r;
+    _materialSpecular[1] = scene.initialSettings.material.specular.g;
+    _materialSpecular[2] = scene.initialSettings.material.specular.b;
 
-    _lightAmbient[0] = scene.lightSource.ambient.r;
-    _lightAmbient[1] = scene.lightSource.ambient.g;
-    _lightAmbient[2] = scene.lightSource.ambient.b;
+    _lightAmbient[0] = scene.initialSettings.lightSource.ambient.r;
+    _lightAmbient[1] = scene.initialSettings.lightSource.ambient.g;
+    _lightAmbient[2] = scene.initialSettings.lightSource.ambient.b;
 
-    _lightDiffuse[0] = scene.lightSource.diffuse.r;
-    _lightDiffuse[1] = scene.lightSource.diffuse.g;
-    _lightDiffuse[2] = scene.lightSource.diffuse.b;
+    _lightDiffuse[0] = scene.initialSettings.lightSource.diffuse.r;
+    _lightDiffuse[1] = scene.initialSettings.lightSource.diffuse.g;
+    _lightDiffuse[2] = scene.initialSettings.lightSource.diffuse.b;
 
-    _lightSpecular[0] = scene.lightSource.specular.r;
-    _lightSpecular[1] = scene.lightSource.specular.g;
-    _lightSpecular[2] = scene.lightSource.specular.b;
+    _lightSpecular[0] = scene.initialSettings.lightSource.specular.r;
+    _lightSpecular[1] = scene.initialSettings.lightSource.specular.g;
+    _lightSpecular[2] = scene.initialSettings.lightSource.specular.b;
 
-    _settings.objectMaterial.shininess = scene.material.shininess;
+    _settings.objectMaterial.shininess = scene.initialSettings.material.shininess;
 }
 
 Overlay::~Overlay() {
@@ -91,6 +91,8 @@ void Overlay::Draw() {
         auto &&ligthModel = GetLightModel();
         if (ligthModel == LigthModel::NONE) {
             _settings.lightModel = LigthModel::NONE;
+            ImGui::Text("Object Material");
+            ImGui::ColorEdit3("Color", _materialAmbient);
         } else if (ligthModel == LigthModel::PHONG) {
             _settings.lightModel = LigthModel::PHONG;
             ImGui::Text("Object Material");

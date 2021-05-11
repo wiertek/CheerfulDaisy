@@ -1,9 +1,9 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
+#include "../Engine/Camera.h"
 #include <array>
 #include <glm/glm.hpp>
-
 
 struct LightSource {
     glm::vec3 position;
@@ -34,7 +34,8 @@ struct Material {
 
 struct FrameDrawingInfo {
     glm::mat4 projection;
-    Material material;
+    Camera* camera{nullptr};
+    LightSource* lightSource{nullptr};
 };
 
 #endif

@@ -1,10 +1,18 @@
 #include "Plain.h"
 
-Plain::Plain(glm::vec3 from, glm::vec3 to) {
-    _vertices[0] = glm::vec3{from.x, 0.0f, from.z};
-    _vertices[1] = glm::vec3{from.x, 0.0f, to.z};
-    _vertices[2] = glm::vec3{to.x, 0.0f, to.z};
-    _vertices[3] = glm::vec3{to.x, 0.0f, from.z};
+#include <cmath>
+
+Plain::Plain(glm::vec3 from, float yLevel, glm::vec3 to) {
+    auto pos = glm::vec3((from.x + to.x) / 2.0, yLevel, (from.z + to.z) / 2.0);
+    auto xRadius = std::abs(pos.x - from.x);
+    auto zRadius = std::abs(pos.z - from.z);
+    auto leftFrontCorner = glm::vec3(-xRadius, 0.0f, -zRadius);
+    auto rightTopBackCorner = glm::vec3(xRadius, 0.0f, zRadius);
+    _vertices[0] = glm::vec3{leftFrontCorner.x, 0.0f, leftFrontCorner.z};
+    _vertices[1] = glm::vec3{leftFrontCorner.x, 0.0f, rightTopBackCorner.z};
+    _vertices[2] = glm::vec3{rightTopBackCorner.x, 0.0f, rightTopBackCorner.z};
+    _vertices[3] = glm::vec3{rightTopBackCorner.x, 0.0f, leftFrontCorner.z};
+    _modelMatrix = glm::translate(glm::mat4(1.0f), pos);
 }
 
 std::vector<Triangle> Plain::GetTriangles() {
@@ -15,9 +23,11 @@ std::vector<Triangle> Plain::GetTriangles() {
     return triangles;
 }
 
+glm::mat4 Plain::GetModelMatrix() { return _modelMatrix; }
+
 std::vector<float> Plain::GetVerticesWithCoords() {
     std::vector<float> verticesAndCoords;
-    verticesAndCoords.reserve(4 * ( 3 + 2));
+    verticesAndCoords.reserve(4 * (3 + 2));
     verticesAndCoords.push_back(_vertices[0].x);
     verticesAndCoords.push_back(_vertices[0].y);
     verticesAndCoords.push_back(_vertices[0].z);
@@ -41,10 +51,8 @@ std::vector<float> Plain::GetVerticesWithCoords() {
     verticesAndCoords.push_back(_vertices[3].z);
     verticesAndCoords.push_back(1.0f);
     verticesAndCoords.push_back(-1.0f);
-     
+
     return verticesAndCoords;
 }
 
-std::vector<int> Plain::GetIndices() {
-    return {0, 1, 3, 1, 2, 3};
-}
+std::vector<int> Plain::GetIndices() { return {0, 1, 3, 1, 2, 3}; }
