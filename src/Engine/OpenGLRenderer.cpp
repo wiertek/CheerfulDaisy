@@ -159,13 +159,13 @@ glm::mat4 OpenGLRenderer::GetLightSourceModelMatrix() {
     model = lightObject.model;
 
     auto directionInXPlane = glm::normalize(glm::vec3(direction.x, 0.0f, direction.z));
-    float angle = std::acosf(directionInXPlane.x);
+    float angle = std::acos(directionInXPlane.x);
     if (directionInXPlane.z > 0) {
         angle *= -1;
     }
 
     glm::vec3 right = glm::normalize(glm::cross(directionInXPlane, glm::vec3(0.0f, 1.0f, 0.0f)));
-    float angleY = std::acosf(direction.x * directionInXPlane.x + direction.z * directionInXPlane.z);
+    float angleY = std::acos(direction.x * directionInXPlane.x + direction.z * directionInXPlane.z);
     if (direction.y > 0) {
         angleY *= -1;
     }
