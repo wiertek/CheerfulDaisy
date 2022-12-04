@@ -1,10 +1,8 @@
 #include "Scene.h"
 
-std::unique_ptr<Primitive>& Scene::Add(std::unique_ptr<Primitive> primitive) {
-    _primitives.push_back(std::move(primitive));
-    return _primitives.back();
+std::unique_ptr<Primitive>& Scene::add(std::unique_ptr<Primitive> primitive) {
+    primitives_.push_back(std::move(primitive));
+    return primitives_.back();
 }
 
-const std::vector<std::unique_ptr<Primitive>>& Scene::GetPrimitives() const {
-    return _primitives;
-}
+const std::vector<std::unique_ptr<Primitive>>& Scene::getPrimitives() const { return primitives_; }

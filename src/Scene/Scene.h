@@ -1,18 +1,15 @@
 #ifndef SCENE_H
 #define SCENE_H
 
-#include "../Common/Definitions.h"
-#include "Primitive.h"
-#include <glm/glm.hpp>
 #include <memory>
 #include <vector>
 
-class Scene {
-  public:
-    
-    std::unique_ptr<Primitive> &Add(std::unique_ptr<Primitive> primitive);
-    const std::vector<std::unique_ptr<Primitive>> &GetPrimitives() const;
+#include <glm/glm.hpp>
 
+#include "../Common/Definitions.h"
+#include "Primitive.h"
+
+class Scene {
     struct InitialSettings {
         glm::vec3 cameraPosition{glm::vec3(0.0f, 0.0f, 0.0f)};
         LightSource lightSource = {
@@ -26,10 +23,14 @@ class Scene {
                              .shininess = 32.0f};
     };
 
+  public:
+    std::unique_ptr<Primitive>& add(std::unique_ptr<Primitive> primitive);
+    const std::vector<std::unique_ptr<Primitive>>& getPrimitives() const;
+
     InitialSettings initialSettings;
 
   private:
-    std::vector<std::unique_ptr<Primitive>> _primitives;
+    std::vector<std::unique_ptr<Primitive>> primitives_;
 };
 
 #endif

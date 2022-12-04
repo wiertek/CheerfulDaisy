@@ -1,11 +1,9 @@
-#include <iostream>
-
-#include "Interface/Window.h"
 #include "Engine/DaisyEngine.h"
+#include "Interface/Window.h"
 
 int main() {
     DaisyEngine engine;
-    engine.MainLoop();
+    engine.mainLoop();
 
     return EXIT_SUCCESS;
 }

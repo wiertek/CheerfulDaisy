@@ -2,34 +2,34 @@
 #include "../Common/OpenGL.h"
 
 Camera::Camera(glm::vec3 position) {
-    position = position;
+    position_ = position;
     updateCameraVectors();
 }
 
-glm::mat4 Camera::getViewMatrix() const { return glm::lookAt(position, position + _front, _up); }
+glm::mat4 Camera::getViewMatrix() const { return glm::lookAt(position_, position_ + front_, up_); }
 
 void Camera::updateCameraVectors() {
     glm::vec3 front;
-    front.x = cos(glm::radians(_yaw)) * cos(glm::radians(_pitch));
-    front.y = sin(glm::radians(_pitch));
-    front.z = sin(glm::radians(_yaw)) * cos(glm::radians(_pitch));
-    _front = glm::normalize(front);
-    _right = glm::normalize(glm::cross(_front, _worldUp));
-    _up = glm::normalize(glm::cross(_right, _front));
+    front.x = cos(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+    front.y = sin(glm::radians(pitch_));
+    front.z = sin(glm::radians(yaw_)) * cos(glm::radians(pitch_));
+    front_ = glm::normalize(front);
+    right_ = glm::normalize(glm::cross(front_, worldUp_));
+    up_ = glm::normalize(glm::cross(right_, front_));
 }
 
 void Camera::processKeyboard(int key, double deltaTime) {
-    float velocity = _movementSpeed * deltaTime;
-    float rotationVelocity = _rotationSpeed * deltaTime;
+    float velocity = movementSpeed_ * deltaTime;
+    float rotationVelocity = rotationSpeed_ * deltaTime;
     switch (key) {
-        case GLFW_KEY_W: position += _front * velocity; break;
-        case GLFW_KEY_S: position -= _front * velocity; break;
-        case GLFW_KEY_A: position -= _right * velocity; break;
-        case GLFW_KEY_D: position += _right * velocity; break;
-        case GLFW_KEY_R: position += _worldUp * velocity; break;
-        case GLFW_KEY_F: position -= _worldUp * velocity; break;
-        case GLFW_KEY_Q: _yaw -= _rotationSpeed; break;
-        case GLFW_KEY_E: _yaw += _rotationSpeed; break;
+        case GLFW_KEY_W: position_ += front_ * velocity; break;
+        case GLFW_KEY_S: position_ -= front_ * velocity; break;
+        case GLFW_KEY_A: position_ -= right_ * velocity; break;
+        case GLFW_KEY_D: position_ += right_ * velocity; break;
+        case GLFW_KEY_R: position_ += worldUp_ * velocity; break;
+        case GLFW_KEY_F: position_ -= worldUp_ * velocity; break;
+        case GLFW_KEY_Q: yaw_ -= rotationVelocity; break;
+        case GLFW_KEY_E: yaw_ += rotationVelocity; break;
     }
     updateCameraVectors();
 }
@@ -40,13 +40,13 @@ void Camera::processMouse(int key, double xOffset, double yOffset) {
         xOffset *= sensitivity;
         yOffset *= sensitivity;
 
-        _yaw += xOffset;
-        _pitch += yOffset;
+        yaw_ += xOffset;
+        pitch_ += yOffset;
 
-        if (_pitch > 89.0f)
-            _pitch = 89.0f;
-        if (_pitch < -89.0f)
-            _pitch = -89.0f;
+        if (pitch_ > 89.0f)
+            pitch_ = 89.0f;
+        if (pitch_ < -89.0f)
+            pitch_ = -89.0f;
         updateCameraVectors();
     }
 }

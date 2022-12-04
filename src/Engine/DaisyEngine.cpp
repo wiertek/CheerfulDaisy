@@ -9,22 +9,21 @@
 #include <glm/glm.hpp>
 #include <memory>
 
-
 constexpr auto TARGET_FPS = 60_fps;
 
 Scene buildSimpleScene();
 void ProcessInput(GLFWwindow* window);
 
-void DaisyEngine::MainLoop() {
+void DaisyEngine::mainLoop() {
 
     Window window;
     FpsLimiter fpsLimiter(TARGET_FPS);
-    _openGLRenderer = &OpenGLRenderer::getInstance();
+    openGLRenderer_ = &OpenGLRenderer::getInstance();
     auto simpleScene = buildSimpleScene();
-    _openGLRenderer->LoadScene(simpleScene);
-    _overlay = std::make_unique<Overlay>(window._glWindow);
-    _overlay->LoadSceneSettings(simpleScene);
-    glfwSetCursorPosCallback(window._glWindow, DaisyEngine::ProcessMouseInput);
+    openGLRenderer_->loadScene(simpleScene);
+    overlay_ = std::make_unique<Overlay>(window.glWindow_);
+    overlay_->loadSceneSettings(simpleScene);
+    glfwSetCursorPosCallback(window.glWindow_, DaisyEngine::ProcessMouseInput);
 
     double lastFrame = 0;
     double deltaTime = 0;
@@ -34,16 +33,16 @@ void DaisyEngine::MainLoop() {
         lastFrame = currentFrame;
     };
 
-    while (!glfwWindowShouldClose(window._glWindow)) {
+    while (!glfwWindowShouldClose(window.glWindow_)) {
         measureDeltaTime();
 
-        _openGLRenderer->DrawFrame(window._glWindow, _overlay->GetSettings());
-        _overlay->Draw();
+        openGLRenderer_->drawFrame(overlay_->getSettings());
+        overlay_->draw();
 
-        glfwSwapBuffers(window._glWindow);
+        glfwSwapBuffers(window.glWindow_);
         glfwPollEvents();
-        processKeyboardInput(window._glWindow, deltaTime);
-        fpsLimiter.FrameEnd();
+        processKeyboardInput(window.glWindow_, deltaTime);
+        fpsLimiter.frameEnd();
     }
 
     glfwTerminate();
@@ -51,8 +50,8 @@ void DaisyEngine::MainLoop() {
 
 Scene buildSimpleScene() {
     Scene scene;
-    scene.Add(std::make_unique<Box>(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.5f, 0.5f, 0.5f)));
-    scene.Add(std::make_unique<Box>(glm::vec3(-2.0f, 0.0f, -2.0f), glm::vec3(-3.0f, 2.0f, -6.0f)));
+    scene.add(std::make_unique<Box>(glm::vec3(-0.5f, -0.5f, -0.5f), glm::vec3(0.5f, 0.5f, 0.5f)));
+    scene.add(std::make_unique<Box>(glm::vec3(-2.0f, 0.0f, -2.0f), glm::vec3(-3.0f, 2.0f, -6.0f)));
     scene.initialSettings.lightSource.position = glm::vec3(2.0f, 2.0f, -2.0f);
     scene.initialSettings.cameraPosition = glm::vec3(0.0f, 0.0f, 3.0f);
     scene.initialSettings.material.ambient = glm::vec3(1.0f, 0.4f, 0.0f);
@@ -61,29 +60,31 @@ Scene buildSimpleScene() {
 }
 
 void DaisyEngine::processKeyboardInput(GLFWwindow* window, double deltaTime) {
+    assert(openGLRenderer_ != nullptr);
+
     if (glfwGetKey(window, GLFW_KEY_W) == GLFW_PRESS) {
-        _openGLRenderer->processKeyboardInput(GLFW_KEY_W, deltaTime);
+        openGLRenderer_->processKeyboardInput(GLFW_KEY_W, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_S) == GLFW_PRESS) {
-        _openGLRenderer->processKeyboardInput(GLFW_KEY_S, deltaTime);
+        openGLRenderer_->processKeyboardInput(GLFW_KEY_S, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_A) == GLFW_PRESS) {
-        _openGLRenderer->processKeyboardInput(GLFW_KEY_A, deltaTime);
+        openGLRenderer_->processKeyboardInput(GLFW_KEY_A, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_D) == GLFW_PRESS) {
-        _openGLRenderer->processKeyboardInput(GLFW_KEY_D, deltaTime);
+        openGLRenderer_->processKeyboardInput(GLFW_KEY_D, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_Q) == GLFW_PRESS) {
-        _openGLRenderer->processKeyboardInput(GLFW_KEY_Q, deltaTime);
+        openGLRenderer_->processKeyboardInput(GLFW_KEY_Q, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_E) == GLFW_PRESS) {
-        _openGLRenderer->processKeyboardInput(GLFW_KEY_E, deltaTime);
+        openGLRenderer_->processKeyboardInput(GLFW_KEY_E, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_R) == GLFW_PRESS) {
-        _openGLRenderer->processKeyboardInput(GLFW_KEY_R, deltaTime);
+        openGLRenderer_->processKeyboardInput(GLFW_KEY_R, deltaTime);
     }
     if (glfwGetKey(window, GLFW_KEY_F) == GLFW_PRESS) {
-        _openGLRenderer->processKeyboardInput(GLFW_KEY_F, deltaTime);
+        openGLRenderer_->processKeyboardInput(GLFW_KEY_F, deltaTime);
     }
 
     if (glfwGetKey(window, GLFW_KEY_ESCAPE) == GLFW_PRESS) {

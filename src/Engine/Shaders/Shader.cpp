@@ -5,8 +5,7 @@
 #include <sstream>
 #include <string>
 
-
-Shader::Shader(const char *vertexPath, const char *fragmentPath) {
+Shader::Shader(const char* vertexPath, const char* fragmentPath) {
     std::string vertexCode, fragmentCode;
     std::ifstream vShaderFile, fShaderFile;
     vShaderFile.exceptions(std::ifstream::failbit | std::ifstream::badbit);
@@ -21,30 +20,30 @@ Shader::Shader(const char *vertexPath, const char *fragmentPath) {
         fShaderFile.close();
         vertexCode = vShaderStream.str();
         fragmentCode = fShaderStream.str();
-    } catch (std::ifstream::failure &e) {
+    } catch (std::ifstream::failure& e) {
         std::cout << "Cannot read the shader file." << std::endl;
     }
-    const char *vShaderCode = vertexCode.c_str();
-    const char *fShaderCode = fragmentCode.c_str();
+    const char* vShaderCode = vertexCode.c_str();
+    const char* fShaderCode = fragmentCode.c_str();
     unsigned int vertex, fragment;
     vertex = glCreateShader(GL_VERTEX_SHADER);
     glShaderSource(vertex, 1, &vShaderCode, NULL);
     glCompileShader(vertex);
-    CheckCompileErrors(vertex, "VERTEX");
+    checkCompileErrors(vertex, "VERTEX");
     fragment = glCreateShader(GL_FRAGMENT_SHADER);
     glShaderSource(fragment, 1, &fShaderCode, NULL);
     glCompileShader(fragment);
-    CheckCompileErrors(fragment, "FRAGMENT");
-    _id = glCreateProgram();
-    glAttachShader(_id, vertex);
-    glAttachShader(_id, fragment);
-    glLinkProgram(_id);
-    CheckLinkageErrors(_id, "PROGRAM");
+    checkCompileErrors(fragment, "FRAGMENT");
+    id_ = glCreateProgram();
+    glAttachShader(id_, vertex);
+    glAttachShader(id_, fragment);
+    glLinkProgram(id_);
+    checkLinkageErrors(id_, "PROGRAM");
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 }
 
-void Shader::CheckCompileErrors(unsigned int shader, const char *type) {
+void Shader::checkCompileErrors(unsigned int shader, const char* type) {
     int success;
     char infoLog[1024];
     glGetShaderiv(shader, GL_COMPILE_STATUS, &success);
@@ -55,7 +54,7 @@ void Shader::CheckCompileErrors(unsigned int shader, const char *type) {
     }
 }
 
-void Shader::CheckLinkageErrors(unsigned int shader, const char *type) {
+void Shader::checkLinkageErrors(unsigned int shader, const char* type) {
     int success;
     char infoLog[1024];
     glGetProgramiv(shader, GL_LINK_STATUS, &success);

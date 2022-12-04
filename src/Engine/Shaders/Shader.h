@@ -16,28 +16,28 @@ class Shader {
     Shader() {}
     Shader(const char* vertexPath, const char* fragmentPath);
 
-    virtual void SetParamsForObject(const FrameDrawingInfo& frameDrawingInfo, const Object& object,
+    virtual void setParamsForObject(const FrameDrawingInfo& frameDrawingInfo, const Object& object,
                                     const OpenGLRendererSettings& settings) = 0;
 
-    void Use() { glUseProgram(_id); }
+    void use() { glUseProgram(id_); }
 
-    void SetFloat(const std::string& name, float value) const {
-        glUniform1f(glGetUniformLocation(_id, name.c_str()), value);
+    void setFloat(const std::string& name, float value) const {
+        glUniform1f(glGetUniformLocation(id_, name.c_str()), value);
     }
 
-    void SetVec3(const std::string& name, const glm::vec3& value) const {
-        glUniform3fv(glGetUniformLocation(_id, name.c_str()), 1, &value[0]);
+    void setVec3(const std::string& name, const glm::vec3& value) const {
+        glUniform3fv(glGetUniformLocation(id_, name.c_str()), 1, &value[0]);
     }
 
-    void SetMat4f(const std::string& name, glm::mat4 matrix) const {
-        glUniformMatrix4fv(glGetUniformLocation(_id, name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
+    void setMat4f(const std::string& name, glm::mat4 matrix) const {
+        glUniformMatrix4fv(glGetUniformLocation(id_, name.c_str()), 1, GL_FALSE, glm::value_ptr(matrix));
     }
 
   private:
-    void CheckCompileErrors(unsigned int shader, const char* type);
-    void CheckLinkageErrors(unsigned int shader, const char* type);
+    void checkCompileErrors(unsigned int shader, const char* type);
+    void checkLinkageErrors(unsigned int shader, const char* type);
 
-    unsigned int _id;
+    unsigned int id_;
 };
 
 #endif

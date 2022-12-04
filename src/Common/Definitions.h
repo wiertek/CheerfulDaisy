@@ -1,9 +1,10 @@
 #ifndef DEFINITIONS_H
 #define DEFINITIONS_H
 
-#include "../Engine/Camera.h"
 #include <array>
 #include <glm/glm.hpp>
+
+#include "../Engine/Camera.h"
 
 struct LightSource {
     glm::vec3 position;

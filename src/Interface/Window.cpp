@@ -1,9 +1,9 @@
-#include <iostream>
 #include <cstdlib>
 #include <functional>
+#include <iostream>
 
-#include "Window.h"
 #include "../Engine/OpenGLRenderer.h"
+#include "Window.h"
 
 Window::Window() {
     glfwInit();
@@ -11,28 +11,25 @@ Window::Window() {
     glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 6);
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_RESIZABLE, GL_TRUE);
-    _glWindow = glfwCreateWindow(viewportWidth, viewportHeight, "Cheerful Daisy", NULL, NULL);
+    glWindow_ = glfwCreateWindow(viewportWidth, viewportHeight, "Cheerful Daisy", NULL, NULL);
     OpenGLRenderer::getInstance().setViewportSize(viewportWidth, viewportHeight);
-    if (_glWindow == NULL)
-    {
+    if (glWindow_ == NULL) {
         std::cout << "Failed to create GLFW window" << std::endl;
         glfwTerminate();
         std::exit(EXIT_FAILURE);
     }
-    glfwMakeContextCurrent(_glWindow);
-    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress))
-    {
+    glfwMakeContextCurrent(glWindow_);
+    if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)) {
         std::cout << "Failed to initialize GLAD" << std::endl;
         std::exit(EXIT_FAILURE);
     }
     glViewport(0, 0, viewportWidth, viewportHeight);
     using namespace std::placeholders;
-    glfwSetWindowUserPointer(_glWindow, this);
-    glfwSetFramebufferSizeCallback(_glWindow, Window::SizeChangedCallback);
+    glfwSetWindowUserPointer(glWindow_, this);
+    glfwSetFramebufferSizeCallback(glWindow_, Window::sizeChangedCallback);
 }
 
-void Window::SizeChangedCallback(GLFWwindow* window, int width, int height) {
+void Window::sizeChangedCallback(GLFWwindow* /*window*/, int width, int height) {
     glViewport(0, 0, width, height);
     OpenGLRenderer::getInstance().setViewportSize(width, height);
 }
-

@@ -8,13 +8,11 @@ constexpr auto viewportWidth = 1600;
 
 class Window {
 
-public:  
+  public:
     Window();
 
-    GLFWwindow* _glWindow;
-    static void SizeChangedCallback(GLFWwindow* window, int width, int height);
+    GLFWwindow* glWindow_;
+    static void sizeChangedCallback(GLFWwindow* /*window*/, int width, int height);
 };
-
-
 
 #endif

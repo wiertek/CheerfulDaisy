@@ -1,14 +1,16 @@
 #ifndef PRIMITIVE_H
 #define PRIMITIVE_H
 
-#include "../Common/Definitions.h"
 #include <vector>
 
+#include "../Common/Definitions.h"
+
 class Primitive {
-public:
-    virtual std::vector<Triangle> GetTriangles() = 0;
-    virtual glm::mat4 GetModelMatrix() = 0;
+  public:
     virtual ~Primitive() {}
+
+    virtual std::vector<Triangle> getTriangles() = 0;
+    virtual glm::mat4 getModelMatrix() = 0;
 };
 
 #endif
