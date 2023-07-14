@@ -4,7 +4,7 @@
 
 #include "Overlay.h"
 
-#include <fmt/core.h>
+#include <format>
 
 Overlay::Overlay(GLFWwindow* window)
     : settings_{.projection = Projection::PERSPECTIVE,
@@ -136,7 +136,7 @@ Projection Overlay::getProjection() {
     switch (projectionIndex_) {
         case 0: return Projection::PERSPECTIVE;
         case 1: return Projection::ORTHOGONAL;
-        default: throw std::invalid_argument(fmt::format("Cannot find Projection of index {}", projectionIndex_));
+        default: throw std::invalid_argument(std::format("Cannot find Projection of index {}", projectionIndex_));
     }
 }
 
@@ -145,7 +145,7 @@ LigthModel Overlay::getLightModel() {
         case 0: return LigthModel::NONE;
         case 1: return LigthModel::PHONG;
         case 2: return LigthModel::GOURAUD;
-        default: throw std::invalid_argument(fmt::format("Cannot find LigthModel of index {}", lightModelIndex_));
+        default: throw std::invalid_argument(std::format("Cannot find LigthModel of index {}", lightModelIndex_));
     }
 }
 

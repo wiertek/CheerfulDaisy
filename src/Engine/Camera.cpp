@@ -19,8 +19,8 @@ void Camera::updateCameraVectors() {
 }
 
 void Camera::processKeyboard(int key, double deltaTime) {
-    float velocity = movementSpeed_ * deltaTime;
-    float rotationVelocity = rotationSpeed_ * deltaTime;
+    float velocity = static_cast<float>(movementSpeed_ * deltaTime);
+    float rotationVelocity = static_cast<float>(rotationSpeed_ * deltaTime);
     switch (key) {
         case GLFW_KEY_W: position_ += front_ * velocity; break;
         case GLFW_KEY_S: position_ -= front_ * velocity; break;
@@ -40,8 +40,8 @@ void Camera::processMouse(int key, double xOffset, double yOffset) {
         xOffset *= sensitivity;
         yOffset *= sensitivity;
 
-        yaw_ += xOffset;
-        pitch_ += yOffset;
+        yaw_ += static_cast<float>(xOffset);
+        pitch_ += static_cast<float>(yOffset);
 
         if (pitch_ > 89.0f)
             pitch_ = 89.0f;

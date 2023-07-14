@@ -15,12 +15,19 @@ set(SHADERS Shaders/SimpleVertexShader.glsl Shaders/SimpleFragmentShader.glsl Sh
 add_executable(Renderer ${HEADERS} ${SOURCES} ${SHADERS})
 target_link_libraries(Renderer
   PRIVATE
-  glad glfw glm fmt DearImGui)
+  glad glfw glm DearImGui)
 target_compile_features(Renderer PUBLIC cxx_std_20)
 
-target_compile_options(Renderer PRIVATE
-  $<$<CXX_COMPILER_ID:MSVC>:/W4 /WX>
-  $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra -Wpedantic -Werror>
+if(MSVC)
+  set(WARNINGS_FLAGS "/W4")
+else()
+  set(WARNINGS_FLAGS "-Wall -Wextra -Wpedantic -Werror")
+endif()
+
+set_source_files_properties(
+  ${SOURCES}
+  PROPERTIES
+  COMPILE_FLAGS ${WARNINGS_FLAGS}
 )
 
 add_custom_command(

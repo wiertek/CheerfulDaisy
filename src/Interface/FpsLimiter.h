@@ -4,7 +4,7 @@
 #include <chrono>
 #include <thread>
 
-constexpr int operator""_fps(unsigned long long framesPerSecond) { return framesPerSecond; }
+constexpr int operator""_fps(unsigned long long framesPerSecond) { return static_cast<int>(framesPerSecond); }
 
 class FpsLimiter {
   public:
